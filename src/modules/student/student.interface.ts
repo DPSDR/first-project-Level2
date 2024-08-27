@@ -1,4 +1,12 @@
-export type Gurdian = {
+import { Model, Types } from "mongoose";
+
+export type TUserName = {
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+};
+
+export type TGurdian = {
   fatherName: string;
   fatherContactNo: string;
   fatherOccupation: string;
@@ -7,32 +15,44 @@ export type Gurdian = {
   motherOccupation: string;
 };
 
-export type UserName = {
-  firstName: string;
-  middleName: string;
-  lastName: string;
-};
-
-export type LocalGurdian = {
+export type TLocalGurdian = {
   name: string;
   occupation: string;
   contactNo: string;
   address: string;
 };
 
-export type Student = {
+export type TStudent = {
   id: string;
-  name: UserName;
-  gender: "male" | "female";
+  user: Types.ObjectId;
+  password: string;
+  name: TUserName;
+  gender: "male" | "female" | "other";
   email: string;
   dateOfBirth?: string;
   contactNo: string;
   emergencyContactNo: string;
   bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
-  permenantAddress: string;
+  permanentAddress: string;
   presentAddress: string;
-  gurdian: Gurdian;
-  localGurdian: LocalGurdian;
+  gurdian: TGurdian;
+  localGurdian: TLocalGurdian;
   profileImg?: string;
-  isActive: "active" | "blocked";
+  isDeleted: boolean;
 };
+
+// for creating static method
+export interface StudentModel extends Model<TStudent> {
+  isUserExists(id: string): Promise<TStudent | null>;
+}
+
+// for creating instance method
+// export type StudentMethods = {
+//   isUserExists(id: string): Promise<TStudent | null>;
+// };
+
+// export type StudentModel = Model<
+//   TStudent,
+//   Record<string, never>,
+//   StudentMethods
+// >;
